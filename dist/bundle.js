@@ -10,22 +10,18 @@ let test = moment().toDate()
 let h=0,m=0,s=0;
 
 $(function() {
-  init();
-  let hour = 24; //制限時間(h)
-  if (localStorage.getItem("h")) {
-
-  } else {
-
-  }
-  $("#dead").text("【残り時間】  "+hour+"：00：00");
-
+  $(function() {
+  console.log(12345);
+  });
+  init(h,m,s);
+  console.log("h:"+h);
   //開始ボタンクリック
   $("#start").on('click', function(event) {
+      console.log("abo");
     $("#start").prop('disabled', true);
     $("#pause").prop('disabled', false);
-
     let startTime = moment().add(24, 'hours').format("YYYY年MM月DD日(ddd) HH:mm:ss");
-    countDown(hour*60*60-1); // h * m * s
+    countDown(h*60*60+m*60+s); // h * m * s
   });
   //一時停止ボタンクリック
   $("#pause").on('click', function () {
@@ -40,6 +36,9 @@ $(function() {
     $("#restart").prop('disabled', true);
     $("#reset").prop('disabled', true);
 
+    h = JSON.parse(localStorage.getItem("h"));
+    m = JSON.parse(localStorage.getItem("m"));
+    s = JSON.parse(localStorage.getItem("s"));
     countDown(h*3600+m*60+s);
   });
   //リセットボタンクリック
@@ -48,19 +47,44 @@ $(function() {
     $("#restart").prop('disabled', true);
     $("#reset").prop('disabled', true);
 
+    localStorage.removeItem("h");
+    localStorage.removeItem("m");
+    localStorage.removeItem("s");
     clearTimeout(timerID);
-    $("#dead").text("【残り時間】  "+hour+"：00：00");
+    h = 24;
+    m = 0;
+    s = 0;
+    $("#dead").text("【残り時間】  "+h+"：00：00");
   });
 
 });
 
 //初期化
-function init() {
+function init(h,m,s) {
   clock();
-  //ボタン非表示
-  $("#pause").prop('disabled', true);
-  $("#restart").prop('disabled', true);
-  $("#reset").prop('disabled', true);
+  if (!(localStorage.getItem("h") == null) ) {
+    h = JSON.parse(localStorage.getItem("h"));
+    m = JSON.parse(localStorage.getItem("m"));
+    s = JSON.parse(localStorage.getItem("s"));
+    //ボタン非表示
+    $("#pause").prop('disabled', true);
+    $("#start").prop('disabled', true);
+    $("#reset").prop('disabled', true);
+    console.log("aboabo");
+  } else {
+    h = 24;
+    m = 0;
+    s = 0;
+    //ボタン非表示
+    $("#pause").prop('disabled', true);
+    $("#restart").prop('disabled', true);
+    $("#reset").prop('disabled', true);
+  }
+    console.log("abo");
+  if(h<10) h="0"+h;
+  if(m<10) m="0"+m;
+  if(s<10) s="0"+s;
+  $("#dead").text("【残り時間】  "+h+"："+m+"："+s);
 }
 
 //現在時刻を表示
@@ -85,8 +109,7 @@ function countDown(time) {
   localStorage.setItem("h", JSON.stringify(h));
   localStorage.setItem("m", JSON.stringify(m));
   localStorage.setItem("s", JSON.stringify(s));
-  let test = JSON.parse(localStorage.getItem("s"));
-  console.log(test);
+  console.log(h);
   timerID = setTimeout(function () {
     time -= 1;
     countDown(time);

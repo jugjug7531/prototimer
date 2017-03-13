@@ -16,7 +16,6 @@ $(function() {
   console.log("h:"+h);
   //開始ボタンクリック
   $("#start").on('click', function(event) {
-      console.log("abo");
     $("#start").prop('disabled', true);
     $("#pause").prop('disabled', false);
     let startTime = moment().add(24, 'hours').format("YYYY年MM月DD日(ddd) HH:mm:ss");
